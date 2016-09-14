@@ -1,4 +1,4 @@
-This is DMAKE version 4.12.2.
+This is DMAKE version 4.12.3.
 
 For information on how to use DMAKE, see man\dmake.nc.
 
@@ -18,18 +18,19 @@ and details on the OpenOffice.org version of DMAKE can be found at:
 
     http://tools.openoffice.org/dmake/
 
-As noted there, the DMAKE sources can still be found in the Apache-Extras site,
-and can be downloaded from the stand-alone DMAKE repository at:
+As noted there, the DMAKE sources used to be found in the Apache-Extras site.
+However, this has since gone by the wayside and alternative development on
+various flavors was started on Github.
 
-    http://svn.codespot.com/a/apache-extras.org/dmake/trunk/  
+This version of DMAKE is derived from dmake-4.12.tar.bz2 taken from the below
+downloads address:
 
-You can download the latest 'stable' source tarball from:
+    https://sourceforge.net/projects/oooextras.mirror/files/dmake-4.12.tar.bz2
 
-    http://code.google.com/a/apache-extras.org/p/dmake/downloads/list
+It includes fixes from:
 
-This version of DMAKE is compiled from dmake-4.12.2.tar.bz2 taken from the above
-downloads address, which actually linked to:
-
-    http://dmake.apache-extras.org.codespot.com/files/dmake-4.12.2.tar.bz2
+    https://github.com/mohawk2/dmake
+    http://search.cpan.org/dist/dmake/
+    https://github.com/Distrotech/dmake
 
 Enjoy!
