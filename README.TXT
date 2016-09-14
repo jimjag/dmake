@@ -34,7 +34,7 @@ It includes fixes from:
     https://github.com/Distrotech/dmake
 
 The goal is for this version to be the canonical and "official" version for
-Apache Open Office 4.1.x and later. Pull requests, patches, suggestions,
+Apache OpenOffice 4.1.x and later. Pull requests, patches, suggestions,
 etc are all welcomed!
 
 Enjoy!
