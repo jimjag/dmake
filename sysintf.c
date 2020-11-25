@@ -53,7 +53,7 @@
 -- 
 --      This program is NOT free software; you can redistribute it and/or
 --      modify it under the terms of the Software License Agreement Provided
---      in the file <distribution-root>/readme/license.txt.
+--      in the file <distribution-root>/COPYING.
 --
 -- LOG
 --      Use cvs log to obtain detailed change logs.

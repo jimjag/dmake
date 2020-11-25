@@ -47,7 +47,7 @@ print "--      Copyright (c) 1996,1997 by WTI Corp.  All rights reserved.";
 print "-- ";
 print "--      This program is NOT free software; you can redistribute it and/or";
 print "--      modify it under the terms of the Software License Agreement Provided";
-print "--      in the file <distribution-root>/readme/license.txt.";
+print "--      in the file <distribution-root>/COPYING.";
 print "--";
 cflag = 1;
    }

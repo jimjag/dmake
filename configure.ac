@@ -92,6 +92,10 @@ case "$_os" in
 	  OS_VERSION=macosx
 # MacOSX is not garuanteed to be case insensitive, assume it's case
 # sensitive, see issue 73661 for details.
+#
+# By default, macOS uses HFS+ and/or APFS which are both case-aware but not
+# case sensitive. Basically, this means README.txt and readme.txt cannot
+# both exist at the same time in the same place
 	  ;;
 	"AIX")
 	  OS_VERSION=sysvr4
