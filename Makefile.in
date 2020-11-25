@@ -422,7 +422,7 @@ AM_CPPFLAGS = -I$(top_srcdir) -I$(top_builddir) \
 	-I$(top_srcdir)/@OS_TYPE@/@OS_VERSION@ \
 	-I$(top_srcdir)/@OS_TYPE@ $(am__append_3) $(am__append_5)
 SUBDIRS = startup tests
-EXTRA_DIST = NEWS ChangeLog
+EXTRA_DIST = CHANGES.md README.md ChangeLog.orig COPYING
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 

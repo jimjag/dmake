@@ -61,4 +61,4 @@ endif
 
 SUBDIRS = startup tests
 
-EXTRA_DIST = NEWS ChangeLog
+EXTRA_DIST = CHANGES.md README.md ChangeLog.orig COPYING
