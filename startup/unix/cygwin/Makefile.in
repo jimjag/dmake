@@ -260,9 +260,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu startup/unix/cygwin/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign startup/unix/cygwin/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu startup/unix/cygwin/Makefile
+	  $(AUTOMAKE) --foreign startup/unix/cygwin/Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
 	  *config.status*) \
