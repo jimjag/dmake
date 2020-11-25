@@ -41,10 +41,10 @@ test $TEST_TYPE $FILE || {
 	exit 1
 }
 
-if test -z "$*"; then
-	echo "I am going to run ./configure with no arguments - if you wish "
-        echo "to pass any to it, please specify them on the $0 command line."
-fi
+#if test -z "$*"; then
+#	echo "I am going to run ./configure with no arguments - if you wish "
+#        echo "to pass any to it, please specify them on the $0 command line."
+#fi
 
 # needed when autotools version changed
 #aclocal
@@ -60,7 +60,7 @@ autoreconf -i
 
 cd $ORIGDIR
 
-$srcdir/configure --prefix=/usr/local "$@"
+#$srcdir/configure --prefix=/usr/local "$@"
 
 echo 
-echo "Now execute GNU make to compile $PROJECT."
+echo "Ready to run ./configure"
