@@ -1,4 +1,4 @@
-This is DMAKE version 4.12.3.
+This is DMAKE version 4.12.4.
 
 For information on how to use DMAKE, see man\dmake.nc.
 
