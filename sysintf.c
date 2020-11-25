@@ -66,7 +66,7 @@
 #   include <sys/timeb.h>
 #endif
 
-/* for cygwin_conv_to_posix_path() in Prolog() and for cygdospath()*/
+/* for cygdospath()*/
 #if __CYGWIN__
 #   include <sys/cygwin.h>
 #endif
@@ -545,22 +545,9 @@ char* argv[];
    if ( (CygDrvPre = MALLOC( PATH_MAX, char)) == NIL(char) )
       No_ram();
    else {
-      int err = cygwin_conv_to_posix_path("c:", CygDrvPre);
-      if (err)
-	 Fatal( "error converting \"%s\" - %s\n",
-		CygDrvPre, strerror (errno));
-      if( (CygDrvPreLen = strlen(CygDrvPre)) == 2 ) {
-	 /* No prefix */
-	 *CygDrvPre = '\0';
-	 CygDrvPreLen = 0;
-      } else {
-	 /* Cut away the directory letter. */
-	 CygDrvPre[CygDrvPreLen-2] = '\0';
-	 /* Cut away the leading '/'. We don't free the pointer, i.e. choose
-	  * the easy way. */
-	 CygDrvPre++;
-	 CygDrvPreLen -= 3;
-      }
+	   /* No prefix */
+	   *CygDrvPre = '\0';
+	   CygDrvPreLen = 0;
    }
 #endif
 

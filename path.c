@@ -314,22 +314,8 @@ char *path;
       DB_RETURN( path );
    }
 
-#if __CYGWIN__
-   /* Use cygwin function to convert a DOS path to a POSIX path. */
-   if( *path && path[1] == ':' && isalpha(*path) ) {
-      int err = cygwin_conv_to_posix_path(path, cpath);
-      if (err)
-	 Fatal( "error converting \"%s\" - %s\n",
-		path, strerror (errno));
-      if( path[2] != '/' && path[2] != '\\' )
-	 Warning("Malformed DOS path %s converted to %s", path, cpath);
-   }
-   else
-#endif
-   {
-      strcpy( cpath, path );
-      Clean_path( cpath );
-   }
+   strcpy( cpath, path );
+   Clean_path( cpath );
 
    DB_PRINT( "path", ("normalized: %s", cpath ));
 
