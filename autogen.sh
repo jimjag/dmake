@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -e
 # Run this to generate all the initial makefiles, etc.
 
 srcdir=`dirname $0`
@@ -47,17 +47,20 @@ if test -z "$*"; then
 fi
 
 # needed when autotools version changed
-aclocal
+#aclocal
 
 # After the first run of autoconf a configure file exists.
 # 'configure --enable-maintainer-mode' will start all other needed autotool helpers.
-autoconf
+#autoconf
+
+# use this instead - runs everything else as needed
+autoreconf -i
 
 #automake -a -c -f
 
 cd $ORIGDIR
 
-$srcdir/configure --enable-maintainer-mode  --prefix=/usr/local "$@"
+$srcdir/configure --prefix=/usr/local "$@"
 
 echo 
 echo "Now execute GNU make to compile $PROJECT."

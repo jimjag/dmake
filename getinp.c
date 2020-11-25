@@ -307,12 +307,12 @@ int  keep;
 	       cmnd = Expand(c+2);
 	       cmnd[strlen(cmnd)-1] = '\0';	/* strip last newline */
 	       Current_target = Root;
-#if defined(MSDOS)
+#if defined(MSDOS) && defined(REAL_MSDOS)
 	       Swap_on_exec = TRUE;
 #endif
 	       Wait_for_completion = TRUE;
 	       Do_cmnd(&cmnd, FALSE, TRUE, Current_target, A_DEFAULT, TRUE);
-#if defined(MSDOS)
+#if defined(MSDOS) && defined(REAL_MSDOS)
 	       Swap_on_exec = FALSE;
 #endif
 	       Wait_for_completion = FALSE;
@@ -358,19 +358,18 @@ char      *brk;
 int	  anchor;
 {
    register char *s;
-   register char *curp = 0;
+   register char *curp = 0; /* pointer to end of this token */
    register char *t;
    int           done = FALSE;
-   char          space[100];
+   char          tokbreak[100];
 
    DB_ENTER( "Get_token" );
 
    s  = string->tk_str;			  /* Get string parameters	*/
-   *s = string->tk_cchar;		  /* ... and strip leading w/s	*/
+   *s = string->tk_cchar;
+   SCAN_WHITE( s );		/* ... and strip leading w/s */
 
-   SCAN_WHITE( s );
-
-   DB_PRINT( "tok", ("What's left [%s]", s) );
+   DB_PRINT( "tok", ("[%s][%s][%d][%d]", s, brk, string->tk_quote, anchor) );
 
    if( !*s ) {
       DB_PRINT( "tok", ("Returning NULL token") );
@@ -378,28 +377,32 @@ int	  anchor;
    }
 
 
-   /* Build the space list.  space contains all those chars that may possibly
-    * cause breaks.  This includes the brk list as well as white space. */
-
+   /* Build the tokbreak list.  tokbreak contains all those chars that
+    * may possibly cause breaks.  This includes the brk list as well as
+    * white space. */
    if( brk != NIL(char) ) {
-      strcpy( space, " \t\r\n" );
-      strcat( space, brk   );
+      strcpy( tokbreak, " \t\r\n" );
+      strcat( tokbreak, brk   );
    }
    else {
-      space[0] = 0xff;            /* a char we know will not show up      */
-      space[1] = 0;
+      tokbreak[0] = 0xff;            /* a char we know will not show up      */
+      tokbreak[1] = 0;
    }
 
 
    /* Handle processing of quoted tokens.  Note that this is disabled if
     * brk is equal to NIL */
 
+   /* in the case that we found a quote and EITHER we're
+    * normally-processing (non-NIL brk) OR we're not currently in a "" */
    while( *s == '\"' && ((brk != NIL(char)) || !string->tk_quote) ) {
-      s++;
-      if( string->tk_quote ) {
-	 curp = s-1;
-	 do { curp = strchr( curp+1, '\"' ); }
+      s++; /* move s after " */
+      if( string->tk_quote ) { /* inside a "" */
+	 curp = s-1; /* start on initial " */
+	 do { curp = strchr( curp+1, '\"' ); } /* curp is next " */
 	 while( (curp != NIL(char)) && (*(curp+1) == '\"'));
+	 /* while still finding " immediately followed by another " */
+	 /* terminates on finding either no " or on non-doubled " */
 
          if( curp == NIL(char) ) Fatal( "Unmatched quote in token" );
 	 string->tk_quote = !string->tk_quote;
@@ -416,7 +419,7 @@ int	  anchor;
 
 
    /* Check for a token break character at the beginning of the token.
-    * If found return the next set of break chars as a token. */
+    * If found return the following set of break chars as a token. */
 
    if( anchor == 2 && brk != NIL(char) ) {
       curp = s;
@@ -433,14 +436,13 @@ int	  anchor;
    /* Scan for the next token in the list and return it less the break char
     * that was used to terminate the token.  It will possibly be returned in
     * the next call to Get_token */
-
    if( !done ) {
       SCAN_WHITE( s );
 
       t = s;
       do {
 	 done = TRUE;
-	 curp = DmStrPbrk(t, space);
+	 curp = DmStrPbrk(t, tokbreak);
 
 	 if( anchor && *curp && !IS_WHITE( *curp ) )
 	    if( ((anchor == 1)?*curp:DmStrSpn(curp,brk)[-1]) != *brk ) {
@@ -457,7 +459,6 @@ found_token:
    string->tk_str   = curp;
    string->tk_cchar = *curp;
    *curp = '\0';
-
    DB_PRINT( "tok", ("Returning [%s]", s) );
    DB_RETURN( s );
 }

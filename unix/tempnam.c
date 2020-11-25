@@ -38,6 +38,7 @@
 
 extern char *mktemp();
 extern int access();
+extern pid_t getpid(void);
 int d_access();
 extern pid_t getpid(void);
 

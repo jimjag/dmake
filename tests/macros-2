@@ -8,11 +8,12 @@ file1="mfile1.mk"
 file2="mfile2.mk"
 file3="dirwith space"
 tmpfiles="$file1 $file2"
+STARTDIR="`pwd`"; WORKDIR="$0-OUTPUT"
+CLEANUP="eval (cd $STARTDIR; rm -rf $WORKDIR)"
+$CLEANUP # Zap remnants of any failed run
+mkdir "$WORKDIR"; cd "$WORKDIR"
 
-trap '{ echo "trapped signal - removing temporary files" ; rm -rf $tmpfiles "$file3"; }' 1 2 3 15
-
-# Remove files from prior failed run
-rm -rf $tmpfiles "$file3"
+trap "{ echo 'trapped signal - removing temporary files' ; $CLEANUP ; }" 1 2 3 15
 
 # Remember to quote variables in generated makefiles( $ -> \$ ).
 # Testcase 1
@@ -36,9 +37,9 @@ all ".SETDIR=dirwith space" :
 	+@echo \$(TMD)
 EOT
 
-output1=`eval ${DMAKEPROG} -r -f $file1`
+output1=`eval ../${DMAKEPROG} -r -f $file1`
 result1=$?
-output2=`eval ${DMAKEPROG} -r -f $file2`
+output2=`eval ../${DMAKEPROG} -r -f $file2`
 result2=$?
 
 if test "$output1" = ""; then
@@ -52,7 +53,7 @@ fi
 
 if test $result1 -eq 0 -a $result2 -eq 0; then
   echo "Success - Cleaning up"
-  rm -rf $tmpfiles "$file3"
+  $CLEANUP
 exit
   result=0
 else

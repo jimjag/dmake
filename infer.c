@@ -1,6 +1,4 @@
-/* $RCSfile: infer.c,v $
--- $Revision: 1.8 $
--- last change: $Author: ihi $ $Date: 2007-10-15 15:39:49 $
+/*
 --
 -- SYNOPSIS
 --      Infer how to make a target.
@@ -612,8 +610,7 @@ register DFASETPTR stack;
 
 	 for( subel = pdfa;
 	      subel != NIL(DFALINK) && (subel->dl_meta != element->dl_meta);
-	      subel = subel->dl_next )
-		;
+	      subel = subel->dl_next );
 
 	 DB_PRINT("inf",("Looking for %s, (%s)",element->dl_meta->CE_NAME,
 			 (subel != NIL(DFALINK))?"succ":"fail"));

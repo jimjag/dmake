@@ -7,11 +7,12 @@
 : ${DMAKEPROG:=dmake}
 file1="mfile1.mk"
 tmpfiles="$file1"
+STARTDIR="`pwd`"; WORKDIR="$0-OUTPUT"
+CLEANUP="eval (cd $STARTDIR; rm -rf $WORKDIR)"
+$CLEANUP # Zap remnants of any failed run
+mkdir "$WORKDIR"; cd "$WORKDIR"
 
-trap '{ echo "trapped signal - removing temporary files" ; rm -rf $tmpfiles ; }' 1 2 3 15
-
-# Remove files from prior failed run
-rm -rf $tmpfiles
+trap "{ echo 'trapped signal - removing temporary files' ; $CLEANUP ; }" 1 2 3 15
 
 # Remember to quote variables in generated makefiles( $ -> \$ ).
 # Test 1 - Check that mktmp can write special characters into a file.
@@ -27,7 +28,7 @@ all :
 
 EOT
 
-output1=`eval ${DMAKEPROG} -r -f $file1`
+output1=`eval ../${DMAKEPROG} -r -f $file1`
 result1=$?
 comparewith=`printf "test1\n\ttest2\n    test3"`
 if test $result1 = 0 -a "$output1" = "$comparewith" ; then
@@ -51,7 +52,7 @@ all :
 
 EOT
 
-output2=`eval ${DMAKEPROG} -r -f $file1`
+output2=`eval ../${DMAKEPROG} -r -f $file1`
 result2=$?
 if test $result2 = 0 -a "$output2" = "text (to dump to file" ; then
   echo "Subtest 2: OK"
@@ -75,7 +76,7 @@ OBJ = fred.obj mary.obj
 	@cat \$(mktmp \$(OBJ:t"+\n"))
 EOT
 
-output3=`eval OOODMAKEMODE=y ${DMAKEPROG} -r -f $file1`
+output3=`eval OOODMAKEMODE=y ../${DMAKEPROG} -r -f $file1`
 result3=$?
 comparewith=`printf "fred.obj+\nmary.obj"`
 if test $result3 = 0 -a "$output3" = "$comparewith" ; then
@@ -100,7 +101,7 @@ OBJ = fred.obj mary.obj joe.obj
 	@cat <+\$(OBJ)+>
 EOT
 
-output4=`eval ${DMAKEPROG} -r -f $file1`
+output4=`eval ../${DMAKEPROG} -r -f $file1`
 result4=$?
 if test $result4 = 0 -a "$output4" = "fred.obj mary.obj joe.obj" ; then
   echo "Subtest 4: OK"
@@ -114,7 +115,7 @@ fi
 
 if test $result1 -eq 0 -a $result2 -eq 0 \
     -a $result3 -eq 0 -a $result4 -eq 0  ; then
-    echo "Success - Cleaning up" && rm -f ${tmpfiles}
+    echo "Success - Cleaning up" && $CLEANUP
     exit
 else
     echo "Failure!"

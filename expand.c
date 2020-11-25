@@ -1,6 +1,4 @@
-/* $RCSfile: expand.c,v $
--- $Revision: 1.8 $
--- last change: $Author: ihi $ $Date: 2007-10-15 15:38:46 $
+/*
 --
 -- SYNOPSIS
 --      Macro expansion code.
@@ -330,7 +328,7 @@ char *src;
 
    if (mod & JUST_FIRST_FLAG) {
       SET_TOKEN(&str, src);
-      if ((s = Get_token(&str,"",FALSE)) != '\0') {
+      if (*(s = Get_token(&str,"",FALSE)) != '\0') {
 	 /* Recycle the quote at the beginning. */
 	 if(str.tk_quote == 0) {
 	    s--;
