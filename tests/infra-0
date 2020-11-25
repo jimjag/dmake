@@ -7,8 +7,12 @@
 file1="mymakefile.mk"
 file2="mytestfile"
 tmpfiles="$file1 $file2"
+STARTDIR="`pwd`"; WORKDIR="$0-OUTPUT"
+CLEANUP="eval (cd $STARTDIR; rm -rf $WORKDIR)"
+$CLEANUP # Zap remnants of any failed run
+mkdir "$WORKDIR"; cd "$WORKDIR"
 
-trap '{ echo "trapped signal - removing temporary files" ; rm -rf $tmpfiles ; }' 1 2 3 15
+trap "{ echo 'trapped signal - removing temporary files' ; $CLEANUP ; }" 1 2 3 15
 
 # Test for "test" programm in path
 which test > /dev/null || { echo "Failure! \"test\" program missing." ; exit 1; } 
@@ -20,7 +24,7 @@ which echo  > /dev/null || { echo "Failure! \"echo\" program missing." ; exit 1;
 echo "Found \"echo\" program."
 
 # Test for dmake program
-${test} -x "${DMAKEPROG}" || { echo "Failure! \"dmake\" is missing." ; exit 1; }
+${test} -x "../${DMAKEPROG}" || { echo "Failure! \"dmake\" is missing." ; exit 1; }
 echo "Found \"dmake\" program."
 
 # Remember to quote variables in generated makefiles( $ -> \$ ).
@@ -31,14 +35,14 @@ ${file2}:
 	touch ${file2}
 EOT
 
-${DMAKEPROG} -r -f $file1
+../${DMAKEPROG} -r -f $file1
 result=$?
 if ${test} ! -e "${file2}"; then
   echo "File missing"
   result=1
 fi
 
-${test} $result -eq 0 && echo "Success - Cleaning up" && rm -f ${tmpfiles}
+${test} $result -eq 0 && echo "Success - Cleaning up" && $CLEANUP
 ${test} $result -ne 0 && echo "Failure!"
 exit $result
 

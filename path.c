@@ -181,7 +181,7 @@ char *path;
 
 #ifdef HAVE_DRIVE_LETTERS
 
-   /* Change all occurences from DirBrkStr to *DirSepStr. This assumes
+   /* Change all occurrences from DirBrkStr to *DirSepStr. This assumes
     * that when HAVE_DRIVE_LETTERS is set the directory separator is
     * either '\' or '/'. */
    if (*DirSepStr == '/')
@@ -239,7 +239,7 @@ char *path;
 
       /* Remove './'. If OOODMAKEMODE is set do this only if it is not at
        * the start of the path. */
-      if ( p-q == 1 && *q == '.' && (q != path || !STOBOOL(OOoDmMode)) ) {
+      if ( p-q == 1 && *q == '.' && (q != path || !BTOBOOL(OOoDmMode)) ) {
 	 len = strlen(p+1)+1;
 	 memmove(q,p+1,len);
 	 q = tpath;

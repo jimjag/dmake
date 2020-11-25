@@ -1,6 +1,4 @@
-/* $RCSfile: config.h,v $
--- $Revision: 1.14 $
--- last change: $Author: kz $ $Date: 2008-03-05 18:40:17 $
+/*
 --
 -- SYNOPSIS
 --      Configurarion include file.
@@ -38,7 +36,7 @@
 
 /* Name and version number of this package */
 #define PACKAGE "dmake"
-#define VERSION "4.12.3"
+#define VERSION "4.13"
 #define BUILDINFO "Windows / MS Visual C++"
 
 #if defined (_MSC_VER)
@@ -102,6 +100,7 @@
 #define HAVE_STRERROR 1
 #define HAVE_TEMPNAM 1
 #define HAVE_FCNTL_H 1
+#define HAVE_SETVBUF 1
 
 /* These defines are needed for itypes.h! (this is tested only with MSVC++ 6.0) */
 #define SIZEOF_INT 4

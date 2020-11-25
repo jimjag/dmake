@@ -7,11 +7,12 @@
 : ${DMAKEPROG:=dmake}
 file1="mfile1.mk"
 tmpfiles="$file1"
+STARTDIR="`pwd`"; WORKDIR="$0-OUTPUT"
+CLEANUP="eval (cd $STARTDIR; rm -rf $WORKDIR)"
+$CLEANUP # Zap remnants of any failed run
+mkdir "$WORKDIR"; cd "$WORKDIR"
 
-trap '{ echo "trapped signal - removing temporary files" ; rm -rf $tmpfiles ; }' 1 2 3 15
-
-# Remove files from prior failed run
-rm -rf $tmpfiles
+trap "{ echo 'trapped signal - removing temporary files' ; $CLEANUP ; }" 1 2 3 15
 
 # Remember to quote variables in generated makefiles( $ -> \$ ).
 # Test 1 - Test if :f works.
@@ -27,7 +28,7 @@ all :
 	@echo f:\$(MACRO:f):
 EOT
 
-output1=`eval ${DMAKEPROG} -r -f $file1`
+output1=`eval ../${DMAKEPROG} -r -f $file1`
 result1=$?
 if test "$output1" != "f:yyy.ext \"xxx.ext\":"; then
   echo "Subtest 1: Wrong result: $output1"
@@ -48,7 +49,7 @@ all :
 
 EOT
 
-output2=`eval ${DMAKEPROG} -r -f $file1`
+output2=`eval ../${DMAKEPROG} -r -f $file1`
 result2=$?
 if test "$output2" != "d:/tmp/ \"/tmp/a  b/\":"; then
   echo "Subtest 2: Wrong result: $output2"
@@ -70,7 +71,7 @@ all :
 
 EOT
 
-output3=`eval ${DMAKEPROG} -r -f $file1`
+output3=`eval ../${DMAKEPROG} -r -f $file1`
 result3=$?
 if test "$output3" != "e:.ext \".ext\":"; then
   echo "Subtest 3: Wrong result: $output3"
@@ -92,7 +93,7 @@ all :
 
 EOT
 
-output4=`eval ${DMAKEPROG} -r -f $file1`
+output4=`eval ../${DMAKEPROG} -r -f $file1`
 result4=$?
 if test "$output4" != "b:yyy \"xxx\":"; then
   echo "Subtest 4: Wrong result: $output4"
@@ -114,7 +115,7 @@ all :
 
 EOT
 
-output5=`eval ${DMAKEPROG} -r -f $file1`
+output5=`eval ../${DMAKEPROG} -r -f $file1`
 result5=$?
 if test "$output5" != "de:/tmp/.ext \"/tmp/a  b/.ext\":"; then
   echo "Subtest 5: Wrong result: $output5"
@@ -136,7 +137,7 @@ all :
 
 EOT
 
-output6=`eval ${DMAKEPROG} -r -f $file1`
+output6=`eval ../${DMAKEPROG} -r -f $file1`
 result6=$?
 if test "$output6" != "e::"; then
   echo "Subtest 6: Wrong result: $output6"
@@ -146,10 +147,31 @@ else
 fi
 
 
+# Test 7
+# further test of :f to ensure place-with-space change doesn't regress
+cat > $file1 <<EOT
+LIST1   = a.a ../b.b ./c.c ..\d.d .\e.e /f.f \g.g c:/h/h.h c:\i\i.i
+LIST2   = \$(LIST1:f)
+DIRBRKSTR = /\: # force Windows behaviour for this test
+
+all:
+	@echo \$(LIST2)
+EOT
+
+output7=`eval ../${DMAKEPROG} -r -f $file1`
+result7=$?
+if test "$output7" != "a.a b.b c.c d.d e.e f.f g.g h.h i.i"; then
+  echo "Subtest 7: Wrong result: $output7"
+  result7=1
+else
+  echo "Subtest 7: OK"
+fi
+
+
 if test $result1 -eq 0 -a $result2 -eq 0 \
     -a $result3 -eq 0  -a $result4 -eq 0 \
-    -a $result5 -eq 0  -a $result6 -eq 0 ; then
-    echo "Success - Cleaning up" && rm -f ${tmpfiles}
+    -a $result5 -eq 0  -a $result6 -eq 0  -a $result7 -eq 0 ; then
+    echo "Success - Cleaning up" && $CLEANUP
     exit
 else
     echo "Failure!"

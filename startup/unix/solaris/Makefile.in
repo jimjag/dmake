@@ -260,9 +260,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign startup/unix/solaris/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu startup/unix/solaris/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign startup/unix/solaris/Makefile
+	  $(AUTOMAKE) --gnu startup/unix/solaris/Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
 	  *config.status*) \

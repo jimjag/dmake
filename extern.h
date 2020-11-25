@@ -1,6 +1,4 @@
-/* $RCSfile: extern.h,v $
--- $Revision: 1.13 $
--- last change: $Author: kz $ $Date: 2008-03-05 18:28:27 $
+/*
 --
 -- SYNOPSIS
 --      External declarations for dmake functions.
@@ -32,6 +30,7 @@
 /* For MSVC++ needs to include windows.h first to avoid problems with
  * type redefinitions. Include it also for MinGW for consistency. */
 #if defined(__MINGW32__) || defined(_MSC_VER)
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif
 
@@ -92,14 +91,13 @@ extern  const int in_quit( void ); /* for unix/runargv.c */
 #include "dstdarg.h"
 #include "dmake.h"
 #include "struct.h"
-#include "vextern.h"
 #include "public.h"
+#include "vextern.h"
 
 /* Include this last as it invalidates some functions that are defined
  * externally above and turns them into no-ops.  Have to do this after
  * the extern declarations however. */
 #include "posix.h"
-
 
 
 /* Common declarations
@@ -134,8 +132,8 @@ char *cygdospath(char *src, int winpath);
 #endif
 
 
-/* Define some usefull macros. This is done here and not in config.h
- * to keep this changes usefull even when not using the autotools based
+/* Define some useful macros. This is done here and not in config.h
+ * to keep this changes useful even when not using the autotools based
  * build, i.e. using config.h files that are local to the architecture. */
 #if defined(_WIN32) || defined(__CYGWIN__) || defined(MSDOS) || defined(OS2) || defined(__EMX__)
 #  define HAVE_DRIVE_LETTERS 1
@@ -171,6 +169,10 @@ char *cygdospath(char *src, int winpath);
 #endif
 #endif
 
+#ifdef _WIN32
+#  define FileTimeTo_time_t(ft) ((time_t)((*((unsigned __int64 *)ft) - 116444736000000000ULL)/10000000ULL))
+#endif
+
 /* Get the working directory fall back code */
 #if ! HAVE_GETCWD
 #if HAVE_GETWD
@@ -190,5 +192,13 @@ char *cygdospath(char *src, int winpath);
 #ifdef DBUG
 #define coreleft() 0L
 #endif
+
+/* generic implementation, override in platform specific sysintf.h
+ * if needed with #undef #define */
+#define DMPORTSTAT_T struct stat
+#define DMPORTSTAT(path, buf) DMSTAT(path, buf)
+#define DMPORTSTAT_SUCCESS(x) ((x) == 0)
+#define DMPORTSTAT_MTIME(x) ((x)->st_mtime)
+#define DMPORTSTAT_ISDIR(x) ((x)->st_mode & S_IFDIR)
 
 #endif

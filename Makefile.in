@@ -126,7 +126,7 @@ bin_PROGRAMS = dmake$(EXEEXT)
 @OSTYPEWIN32_TRUE@am__append_4 = win95/dchdir.c win95/switchar.c \
 @OSTYPEWIN32_TRUE@                 msdos/dstrlwr.c msdos/arlib.c \
 @OSTYPEWIN32_TRUE@                 msdos/dirbrk.c unix/runargv.c \
-@OSTYPEWIN32_TRUE@                 unix/rmprq.c \
+@OSTYPEWIN32_TRUE@                 unix/rmprq.c unix/dcache.c \
 @OSTYPEWIN32_TRUE@                 win95/microsft/ruletab.c
 
 @OSTYPEWIN32_TRUE@am__append_5 = -I$(top_srcdir)/@OS_TYPE@/@OS_VERSION@ -I$(top_srcdir)/@OS_TYPE@
@@ -164,6 +164,7 @@ am__dirstamp = $(am__leading_dot)dirstamp
 @OSTYPEWIN32_TRUE@	msdos/dstrlwr.$(OBJEXT) \
 @OSTYPEWIN32_TRUE@	msdos/arlib.$(OBJEXT) msdos/dirbrk.$(OBJEXT) \
 @OSTYPEWIN32_TRUE@	unix/runargv.$(OBJEXT) unix/rmprq.$(OBJEXT) \
+@OSTYPEWIN32_TRUE@	unix/dcache.$(OBJEXT) \
 @OSTYPEWIN32_TRUE@	win95/microsft/ruletab.$(OBJEXT)
 am_dmake_OBJECTS = infer.$(OBJEXT) make.$(OBJEXT) stat.$(OBJEXT) \
 	expand.$(OBJEXT) dmstring.$(OBJEXT) hash.$(OBJEXT) \

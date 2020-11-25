@@ -60,8 +60,11 @@ HASHPTR hp;
 	 /* No special treatment for TMD needed. */
 	 break;
 
-      case M_VAR_CHAR:
-         *hp->MV_CVAR = (hp->ht_value == NIL(char)) ? '\0':*hp->ht_value;
+      case M_VAR_BOOL:
+         *hp->MV_CVAR = (hp->ht_value == NIL(char)) ? FALSE:
+         /* |0x20 turns turn ASCII 'Y' into 'y', if 'y' it stays as 'y' */
+            (*hp->ht_value | 0x20)== 'y'
+               ? TRUE : FALSE;
          break;
          
       case M_VAR_INT: {
@@ -297,9 +300,9 @@ HASHPTR hp;
 PUBLIC HASHPTR
 Def_macro( name, value, flags )/*
 =================================
-   This routine is used to define a macro, and it's value. A copy of
+   This routine is used to define a macro, and its value. A copy of
    the content of value is stored and not the pointer to the value.
-   The flags indicates if it is a permanent macro or if it's value
+   The flags indicates if it is a permanent macro or if its value
    can be redefined.  A flags of M_PRECIOUS means it is a precious
    macro and cannot be further redefined unless M_FORCE is used.
    If the flags flag contains the M_MULTI bit it means that the macro
@@ -364,11 +367,12 @@ int     flags;			/* initial ht_flags	*/
    /* If an empty string ("") is given set ht_value to NIL(char) */
    if( (value != NIL(char)) && (*value) ) {
 
+      p = q = DmStrDup(value);
       if( !(flags & M_LITERAL) ) {
-	 q = DmStrDup(value);
+
 	 /* strip out any \<nl> combinations where \ is the current
 	  * CONTINUATION char */
-	 for(p=q; (p=strchr(p,CONTINUATION_CHAR))!=NIL(char); )
+	 for(; (p=strchr(p,CONTINUATION_CHAR))!=NIL(char); )
 	    if( p[1] == '\n' ) {
 	       size_t len = strlen(p+2)+1;
 	       memmove ( p, p+2, len );
@@ -389,8 +393,7 @@ int     flags;			/* initial ht_flags	*/
 	 }
 	 flags &= ~M_LITERAL;
       }
-      else
-	 p = DmStrDup( value );	   		/* take string literally   */
+      /* else take string literally   */
       
       if( !*p )	{				/* check if result is ""   */
          FREE( p );
@@ -674,7 +677,7 @@ char *rp;
 	 case '-' : flag |= A_IGNORE; break;
 	 case '+' : flag |= A_SHELL;  break;
 	 case '%' :
-#if defined(MSDOS)
+#if defined(MSDOS) && defined(REAL_MSDOS)
 	    /* Ignore % in the non-MSDOS case. */
 	    flag |= A_SWAP;
 #endif

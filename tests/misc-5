@@ -9,11 +9,12 @@ file1="mymakefile.mk"
 file2="incfile.mk"
 file3="incfiledepend"
 tmpfiles="$file1 $file2 $file3"
+STARTDIR="`pwd`"; WORKDIR="$0-OUTPUT"
+CLEANUP="eval (cd $STARTDIR; rm -rf $WORKDIR)"
+$CLEANUP # Zap remnants of any failed run
+mkdir "$WORKDIR"; cd "$WORKDIR"
 
-trap '{ echo "trapped signal - removing temporary files" ; rm -rf $tmpfiles ; }' 1 2 3 15
-
-# Remove files from prior failed run
-rm -rf $tmpfiles
+trap "{ echo 'trapped signal - removing temporary files' ; $CLEANUP ; }" 1 2 3 15
 
 # Remember to quote variables in generated makefiles( $ -> \$ ).
 cat > $file1 <<EOT
@@ -34,7 +35,7 @@ all :
 	+@echo aa:\$(AA):bb 
 EOT
 
-output=`eval ${DMAKEPROG} -r -P2 -f $file1 all`
+output=`eval ../${DMAKEPROG} -r -P2 -f $file1 all`
 result=$?
 
 # The space between aaa and bbb comes from the +=
@@ -44,6 +45,6 @@ if test "$output" != "aa:123:bb"; then
 fi
 
 
-test $result -eq 0 && echo "Success - Cleaning up" && rm -f ${tmpfiles}
+test $result -eq 0 && echo "Success - Cleaning up" && $CLEANUP
 test $result -ne 0 && echo "Failure!"
 exit $result

@@ -4,9 +4,9 @@ AC_PREREQ(2.59)
 
 dnl Set the package version
 dnl Don't forget to update the PACKAGE, VERSION and BUILDINFO macros in
-dnl dmake/win95/microsft/config.h to keep the native Microsoft C++
+dnl win95/microsft/config.h to keep the native Microsoft C++
 dnl compiler build happy. 
-AC_INIT(dmake, 4.12.4)
+AC_INIT(dmake, 4.13.0)
 AC_CANONICAL_BUILD
 BUILDINFO="$build"
 
@@ -92,10 +92,6 @@ case "$_os" in
 	  OS_VERSION=macosx
 # MacOSX is not garuanteed to be case insensitive, assume it's case
 # sensitive, see issue 73661 for details.
-#
-# By default, macOS uses HFS+ and/or APFS which are both case-aware but not
-# case sensitive. Basically, this means README.txt and readme.txt cannot
-# both exist at the same time in the same place
 	  ;;
 	"AIX")
 	  OS_VERSION=sysvr4
@@ -196,7 +192,7 @@ dnl Initialize libtool
 dnl Checks for header files.
 AC_HEADER_DIRENT
 AC_HEADER_STDC
-AC_CHECK_HEADERS(fcntl.h limits.h strings.h sys/types.h sys/stat.h unistd.h errno.h utime.h spawn.h wait.h sys/wait.h sys/time.h)
+AC_CHECK_HEADERS(fcntl.h limits.h strings.h sys/types.h sys/stat.h unistd.h errno.h utime.h spawn.h wait.h sys/wait.h sys/time.h cygwin/process.h)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -219,7 +215,7 @@ AC_TYPE_SIGNAL
 AC_FUNC_UTIME_NULL
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS(getcwd getwd strerror setvbuf tzset settz mkstemp tempnam gettimeofday setenv)
-# Usefull, but special to newlib/MSVC
+# Useful, but special to newlib/MSVC
 AC_CHECK_FUNCS(strlwr)
 
 dnl *** output to disk ***

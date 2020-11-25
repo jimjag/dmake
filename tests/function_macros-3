@@ -8,10 +8,12 @@
 file1="makefile.mk"
 file2="stdout.txt"
 tmpfiles="$file1 $file2"
+STARTDIR="`pwd`"; WORKDIR="$0-OUTPUT"
+CLEANUP="eval (cd $STARTDIR; rm -rf $WORKDIR)"
+$CLEANUP # Zap remnants of any failed run
+mkdir "$WORKDIR"; cd "$WORKDIR"
 
-trap '{ echo "trapped signal - removing temporary files" ; rm -rf $tmpfiles ; }' 1 2 3 15
-
-trap 'rm -rf $tmpfiles' 1 2 3 15 
+trap "{ echo 'trapped signal - removing temporary files' ; $CLEANUP ; }" 1 2 3 15
 
 # Remember to quote variables in generated makefiles( $ -> \$ ).
 cat > $file1 <<EOT
@@ -28,13 +30,13 @@ $file2 :
 	+@echo A\$(AA)A > $file2
 EOT
 
-${DMAKEPROG} -P2 -r -f $file1
+../${DMAKEPROG} -P2 -r -f $file1
 result=$?
 if test "`cat $file2`" != "AXshellexecXA"; then
   echo "Wrong result: `cat $file2`, AXshellexecXA expected!"
   result=1
 fi
 
-test $result -eq 0 && echo "Success - Cleaning up" && rm -f ${tmpfiles}
+test $result -eq 0 && echo "Success - Cleaning up" && $CLEANUP
 test $result -ne 0 && echo "Failure!"
 exit $result

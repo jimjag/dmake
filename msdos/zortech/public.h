@@ -107,8 +107,8 @@ char *Filedir ANSI((char *));
 char *Build_path ANSI((char *, char *));
 void Make_rules ANSI(());
 void Create_macro_vars ANSI(());
-time_t Do_stat ANSI((char *, char *, char **, int));
-int Do_touch ANSI((char *, char *, char **));
+time_t Do_stat ANSI((char *, char *, int));
+int Do_touch ANSI((char *, char *));
 void Void_lib_cache ANSI((char *, char *));
 time_t Do_time ANSI(());
 void Do_profile_output ANSI((char *, uint16, CELLPTR));
@@ -165,5 +165,6 @@ void Remove_prq ANSI((CELLPTR));
 void Hook_std_writes ANSI((char *));
 void dstrlwr ANSI((char *, char *));
 time_t CacheStat ANSI((char *, int));
+const int in_quit( void );
 
 #endif
