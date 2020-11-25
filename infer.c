@@ -610,7 +610,8 @@ register DFASETPTR stack;
 
 	 for( subel = pdfa;
 	      subel != NIL(DFALINK) && (subel->dl_meta != element->dl_meta);
-	      subel = subel->dl_next );
+	      subel = subel->dl_next )
+            ;
 
 	 DB_PRINT("inf",("Looking for %s, (%s)",element->dl_meta->CE_NAME,
 			 (subel != NIL(DFALINK))?"succ":"fail"));
