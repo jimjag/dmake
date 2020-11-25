@@ -1,29 +1,29 @@
-News information for the dmake version that is hosted on GitHub (based on
-the Apache-Extras svn.)
+Changes in DMAKE
+================
 
 Version 4.13.0
-==============
+--------------
 
 More updates to support macOS 10.15 (and above)
 Pull in various fixes
 
 Version 4.12.4
-==============
+--------------
 
 macOS upgrades for 10.15 (and higher)
 
 Version 4.12.3
-==============
+--------------
 
-The "dbug" library has been restored to the distribution.
+The `dbug` library has been restored to the distribution.
 
 Version 4.12.2
-==============
+--------------
 
 Includes minimal changes to add support for OS/2, DragonFly and NetBSD.
 Also includes some small enhancements taken from LibreOffice.
 
-The "dbug" library has been removed from the distribution,
+The `dbug` library has been removed from the distribution,
 it's still available in SVN and a more up to date version
 at sourceforge.
 
@@ -32,7 +32,7 @@ cvs. #i<number># denote issues tracked by the OpenOffice.org issue tracking
 system, see <http://qa.openoffice.org/issue_handling/project_issues.html>.
 
 Version 4.12
-============
+------------
 
 Volker Quetschke (vq@openoffice.org)
 #i83540# Add parallel building mode, see the MULTI PROCESSING section in
@@ -40,7 +40,7 @@ the dmake man page, for native W32 dmake (MSVC 6, and newer and MinGW)
 versions.
 
 Version 4.11
-============
+------------
 
 Yuri Dario (ydario@openoffice.org)
 #i81855, CWS os2port01# Port dmake to OS/2.
@@ -71,13 +71,13 @@ format. If the optional parameter para is given for the function macro its
 expanded value is used to override the .WINPATH setting for the output.
 
 Version 4.10 (skipped)
-======================
+----------------------
 
 This number was skipped to avoid confusion with Version 4.1, patch level 0
 which identified itself as "Version 4.10, PL 0".
 
 Version 4.9
-===========
+-----------
 
 Volker Quetschke (vq@openoffice.org)
 #i74700#  Add a new special macro OOODMAKEMODE that is used to toggle
@@ -87,7 +87,7 @@ normalization.
 
 
 Version 4.8
-===========
+-----------
 
 Volker Quetschke (vq@openoffice.org)
 #i73499#  Add new .WINPATH attribute to generate Windows style paths (with
@@ -114,7 +114,7 @@ Examples:
 
 
 Version 4.7
-===========
+-----------
 
 Volker Quetschke (vq@openoffice.org)
 #i71422# Add @@ as a new recipe line property. This new property is a
@@ -145,7 +145,7 @@ and cygwin POSIX pathnames. As the internal format uses cygwin's natural
 POSIX representation runtime macros will result in POSIX paths.
 
 Version 4.6
-===========
+-----------
 
 Volker Quetschke (vq@openoffice.org)
 #i67589# Implement the internal dmake commands noop and echo. These commands
@@ -167,7 +167,7 @@ issue an error if a %-target was defined with the .SILENT attribute and dmake
 was started with the -vr (included in -v) verbose flag.
 
 Version 4.5
-===========
+--------------
 
 Volker Quetschke (vq@openoffice.org)
 #i66385# Fix the handling of .<suffix> targets. Always treat these targets
@@ -199,7 +199,7 @@ behavior to match the man page would have introduced a lot of compatibility
 issues.
 
 Version 4.4
-===========
+-----------
 
 2006/02/03 Volker Quetschke (vq@openoffice.org)
 #i61170# Fix the TMD macro. Up to now the TMD macro appended a directory
@@ -273,7 +273,7 @@ or comment line.
 #i36027# Improve function macro parameter parsing.
 
 Version 4.3
-===========
+-----------
 
 2004/10/07 Volker Quetschke (vq@openoffice.org)
 #i34746# Fix timestamp of phony targets with prerequisites.
@@ -325,7 +325,7 @@ Added forceful exit to avoid infinite loop that sometimes occurs when
 there is a fatal error. Lost a child problem. (Part I)
 
 Version 4.2
-===========
+-----------
 (Note, the dmake -V output was not changed and still said
 "Version 4.10, PL 0". This probably should have been 4.1)
 
