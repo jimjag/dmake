@@ -104,7 +104,9 @@
 #endif
 #define ARG(a,b) a b
 
-#define SCCID "Copyright (c) 1990,...,1997 by WTI Corp."
+#define SCCID "Copyright (c) 1990,...,1997 by WTI Corp.\n" \
+              "Licensed under the GPLv1\n" \
+              "https://jimjag.github.io/dmake/"
 static char _warn  = TRUE;		/* warnings on by default */
 
 static	void	_do_VPATH();
@@ -975,5 +977,5 @@ Version()
 #endif
 #endif
 
-      "Please read the NEWS file for the latest release notes.");
+      "Please read the CHANGES.md file for the latest release notes.");
 }
