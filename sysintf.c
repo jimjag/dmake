@@ -1105,14 +1105,24 @@ CELLPTR cp;
 PUBLIC int
 Remove_file( name )
 char *name;
+/*
+ * Save some cycles. Avoid the stat() calls
+ */
 {
+#if 0
    struct stat buf;
 
    if( stat(name, &buf) != 0 )
       return 1;
    if( (buf.st_mode & S_IFMT) == S_IFDIR )
       return 1;
+#endif
+#ifdef _WIN32
+/* we dont need errno set, no callers check errno */
+   return !DeleteFile(name);
+#else
    return(unlink(name));
+#endif
 }
 
 
