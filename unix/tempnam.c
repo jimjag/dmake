@@ -29,6 +29,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #if defined(max)
 #   undef  max
@@ -38,6 +39,7 @@
 extern char *mktemp();
 extern int access();
 int d_access();
+extern pid_t getpid(void);
 
 char *
 dtempnam(dir, prefix)
@@ -87,7 +89,7 @@ char *prefix;		/* use this (if non-NULL) as filename prefix */
 
 
 
-d_access( name, flag )
+int d_access( name, flag )
 char *name;
 int  flag;
 {
