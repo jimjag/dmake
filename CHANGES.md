@@ -1,10 +1,16 @@
 Changes in DMAKE
 ================
 
+Version 4.13.1
+--------------
+
+Restore old cygwin_conv_to_posix_path() logic but use cygwin_conv_path() instead
+
 Version 4.13.0
 --------------
 
 More updates to support macOS 10.15 (and above)
+
 Pull in various fixes
 
 Version 4.12.4
