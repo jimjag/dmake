@@ -102,6 +102,9 @@ case "$_os" in
 	"FreeBSD")
 	  OS_VERSION=linux
 	  ;;
+	"MidnightBSD")
+	  OS_VERSION=linux
+	  ;;
 	"NetBSD")
 	  OS_VERSION=linux
 	  ;;
