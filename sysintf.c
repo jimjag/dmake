@@ -110,7 +110,6 @@ int  force;
 {
    char * basename;
    DMPORTSTAT_T buf;
-   time_t seek_arch();
 
 /*
    if( member != NIL(char *) )
