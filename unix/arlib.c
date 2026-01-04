@@ -269,7 +269,6 @@ register FILE *f;
 int      (*function) ANSI((FILE *, struct AR *, struct ar_args *));
 struct   ar_args *arg;
 {
-   extern long atol ();
    register char *p;
    struct ar_hdr arhdr;   /* archive member header   */
    long		 nsize;   /* size of member name     */

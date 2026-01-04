@@ -545,7 +545,6 @@ _exec_shell( data, expand )/*
 char *data;
 int expand;
 {
-   extern char *tempnam();
    int  bsize;
    char *buffer;
    char *tmpnm;
