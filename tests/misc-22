@@ -23,7 +23,7 @@ touch "$marker"
 ../${DMAKEPROG} -r -n -t -f "$file1" all >/dev/null 2>&1
 result=$?
 
-if test "$target" -nt "$marker"; then
+if test -n "`find "$target" -newer "$marker" 2>/dev/null`"; then
   echo "Dry-run touch modified $target"
   result=1
 fi

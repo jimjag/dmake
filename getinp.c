@@ -190,7 +190,8 @@ do_again:
 	    cont = FALSE;
 	 }
 
-	 q = ( c == NIL(char) ) ? q+2 : c;
+	 /* q+2 assumes a trailing \n; the line may have lost it above. */
+	 q = ( c == NIL(char) ) ? p+strlen(p) : c;
       }
       else {  /* empty line or "" */
 	 cont = FALSE;

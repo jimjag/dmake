@@ -11,9 +11,14 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    strategy:
+      fail-fast: false
+      matrix:
+        confflags: ['', '--enable-spawn']
+
     steps:
     - uses: actions/checkout@v4
-    - run: ./configure
+    - run: ./configure ${{ matrix.confflags }}
     - run: make
     - run: make check
     - run: make distclean

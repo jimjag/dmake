@@ -61,4 +61,4 @@ endif
 
 SUBDIRS = startup tests
 
-EXTRA_DIST = CHANGES.md README.md ChangeLog.orig COPYING man/dmake.tf man/dmake.nc
+EXTRA_DIST = CHANGES.md README.md ChangeLog.orig COPYING man/dmake.tf man/dmake.nc man/readme

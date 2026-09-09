@@ -6,6 +6,13 @@ Version 4.13.1
 
 Restore old cygwin_conv_to_posix_path() logic but use cygwin_conv_path() instead
 
+Bound process-queue scans by the allocated queue size rather than MAXPROCESS
+
+Fix spawn failures being reported against a pid instead of a queue slot
+
+Avoid out-of-bounds pointer arithmetic when parsing lines shorter than two
+characters
+
 Version 4.13.0
 --------------
 

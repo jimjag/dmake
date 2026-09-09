@@ -511,10 +511,6 @@ char  **cmd; /* Simulate a reference to *cmd. */
       }
    }
 
-   if( _procs != NIL(PR) && _procs_size != Max_proc )
-      Fatal( "MAXPROCESS changed from `%d' to `%d' after a command was executed!",
-             _procs_size, Max_proc );
-
    /* If all process array entries are used wait until we get a free
     * slot. For Max_proc == 1 this forces sequential execution. */
    while( _proc_cnt == Max_proc ) {

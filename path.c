@@ -304,6 +304,9 @@ char *path;
    static char     *cpath  = NIL(char);
    static unsigned cpathlen = 0;
    unsigned        len;
+#if __CYGWIN__
+   int             dospath;
+#endif
 
    DB_ENTER( "normalize_path" );
 
@@ -321,7 +324,8 @@ char *path;
    if( len < PATH_MAX ) len = PATH_MAX;
 
 #if __CYGWIN__
-   if( *path && path[1] == ':' && isalpha(*path) ) {
+   dospath = ( *path && path[1] == ':' && isalpha(*path) );
+   if( dospath ) {
       ssize_t needed = cygwin_conv_path(CCP_WIN_A_TO_POSIX, path, NULL, 0);
       if( needed < 0 )
 	 Fatal( "error sizing conversion of \"%s\" - %s\n",
@@ -343,7 +347,7 @@ char *path;
 
 #if __CYGWIN__
    /* Use cygwin function to convert a DOS path to a POSIX path. */
-   if( *path && path[1] == ':' && isalpha(*path) ) {
+   if( dospath ) {
       int err = cygwin_conv_path(CCP_WIN_A_TO_POSIX, path, cpath, cpathlen);
       if (err < 0)
 	 Fatal( "error converting \"%s\" - %s\n",
