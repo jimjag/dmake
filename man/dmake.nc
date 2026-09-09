@@ -801,7 +801,9 @@ DMAKE(1)                                                              DMAKE(1)
        .SYMBOL     Target is a library member and is an  entry  point  into  a
                    module  in  the  library.  This attribute is used only when
                    searching a library for a  target.   Targets  of  the  form
-                   lib((entry)) have this attribute set automatically.
+                   lib((entry))  have  this  attribute set automatically. This
+                   feature is presently disabled (see LIBRARIES below); making
+                   a target that has this attribute set is an error.
 
        .USESHELL   Force  each  recipe line of a target to be executed using a
                    shell.   Specifying  this  attribute   is   equivalent   to
