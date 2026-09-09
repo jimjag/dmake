@@ -904,7 +904,12 @@ CELLPTR target;
 
    if( status ) {
       if( !abort_flg ) {
-	 char buf[512];
+	 char *buf;
+
+	 /* Target names are not length limited; 96 covers the literal text,
+	  * the error code and the " (Ignored,Continuing)" suffix. */
+	 if( (buf = MALLOC( strlen(Pname)+strlen(target->ce_fname)+96, char ))
+	     == NIL(char) ) No_ram();
 
 	 sprintf(buf, "%s:  Error code %d, while making '%s'",
 		 Pname, status, target->ce_fname );
@@ -922,6 +927,7 @@ CELLPTR target;
 	       if (Verbose)
 		  fprintf(stderr, "%s\n", buf);
 	    }
+	    FREE( buf );
 
 	    if( target->ce_attr & A_ERRREMOVE
 		&& Remove_file( target->ce_fname ) == 0
@@ -930,6 +936,7 @@ CELLPTR target;
 	 }
 	 else {
 	    fprintf(stderr, "%s\n",buf);
+	    FREE( buf );
 
 	    if(!(target->ce_attr & A_PRECIOUS)||(target->ce_attr & A_ERRREMOVE))
 	       if( Remove_file( target->ce_fname ) == 0 )

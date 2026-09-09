@@ -141,12 +141,17 @@ do_again:
 	  * actual line is END_OF_FILE, you can skip the last char. Then
 	  * you can search the line back until you find no more END_OF_FILE
 	  * and nuke each you found by string termination. */
-	 if( q[0] == '\032' )
+	 if( q >= p && q[0] == '\032' )
 	    q--;
-	 while( q[1] == '\032' ) {
+	 while( q+1 >= p && q[1] == '\032' ) {
 	    q[1] = '\0';
 	    q--;
 	 }
+      }
+
+      /* The stripping above can empty the line (a bare \r\n does), so only
+       * decide here whether there is any content left to inspect. */
+      if( q >= p ) {
 
 	 /* ignore input if ignore flag set and line ends in a continuation
 	    character. */

@@ -130,6 +130,8 @@ char *name;
          path = MALLOC( buflen, char );
       else
          path = realloc( path, (unsigned) (buflen*sizeof(char)) );
+
+      if( path == NIL(char) ) No_ram();
    }
    
    *path = '\0';
@@ -209,7 +211,8 @@ char *path;
    for( ; *q == *DirSepStr ; ++q )
       ;
    if( q - tpath > 2 - hasdriveletter ) {
-      strcpy(tpath+1, q);
+      len = strlen(q)+1;
+      memmove(tpath+1, q, len);
    }
 
    /* Set tpath after leading slash / drive letter. */
@@ -298,12 +301,11 @@ normalize_path(path)/*
 
 char *path;
 {
-   static char *cpath = NIL(char);
+   static char     *cpath  = NIL(char);
+   static unsigned cpathlen = 0;
+   unsigned        len;
 
    DB_ENTER( "normalize_path" );
-
-   if ( !cpath && ( (cpath = MALLOC( PATH_MAX, char)) == NIL(char) ) )
-      No_ram();
 
    /* If there is a $ in the path this can either mean a '$' character in
     * a target definition or a dynamic macro expression in a prerequisite
@@ -312,6 +314,22 @@ char *path;
     * the normalization if a $ is found.  */
    if( strchr(path, '$') ) {
       DB_RETURN( path );
+   }
+
+   /* Target names are not bound by PATH_MAX, so grow the buffer to fit.
+    * cygwin_conv_path() below is handed PATH_MAX and must never get less. */
+   len = (unsigned) strlen(path)+1;
+   if( len < PATH_MAX ) len = PATH_MAX;
+
+   if( len > cpathlen ) {
+      cpathlen = (len+16) & ~0xf;	/* buf is always multiple of 16 */
+
+      if( cpath == NIL(char) )
+	 cpath = MALLOC( cpathlen, char );
+      else
+	 cpath = realloc( cpath, (unsigned) (cpathlen*sizeof(char)) );
+
+      if( cpath == NIL(char) ) No_ram();
    }
 
 #if __CYGWIN__
@@ -327,8 +345,8 @@ char *path;
    else
 #endif
    {
-   strcpy( cpath, path );
-   Clean_path( cpath );
+      strcpy( cpath, path );
+      Clean_path( cpath );
    }
 
    DB_PRINT( "path", ("normalized: %s", cpath ));
