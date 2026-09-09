@@ -1,17 +1,30 @@
 Changes in DMAKE
 ================
 
+Version 4.13.2
+--------------
+
+Fix memory-safety and correctness bugs found under ASAN, including buffer
+overruns reachable with a long target name
+
+Honor -n when -t is given, instead of touching files for real
+
+Bound process-queue scans and index checks by the allocated queue size rather
+than MAXPROCESS
+
+Fix spawn failures being reported against a pid instead of a queue slot
+
+Avoid out-of-bounds pointer arithmetic when parsing short input lines
+
+Restore CI, which had keyed on a branch that never carried the workflow, and
+run it against both the default and --enable-spawn configurations
+
+Include the manuals in distribution archives
+
 Version 4.13.1
 --------------
 
 Restore old cygwin_conv_to_posix_path() logic but use cygwin_conv_path() instead
-
-Bound process-queue scans by the allocated queue size rather than MAXPROCESS
-
-Fix spawn failures being reported against a pid instead of a queue slot
-
-Avoid out-of-bounds pointer arithmetic when parsing lines shorter than two
-characters
 
 Version 4.13.0
 --------------
