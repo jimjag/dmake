@@ -139,7 +139,7 @@ int Get_line ANSI((char *, FILE *));
 char *Do_comment ANSI((char *, char **, int));
 char *Get_token ANSI((TKSTRPTR, char *, int));
 void Quit ANSI((int));
-const int in_quit ANSI((void));
+int in_quit ANSI((void));
 void Read_state ANSI(());
 void Write_state ANSI(());
 int Check_state ANSI((CELLPTR, STRINGPTR *, int));
@@ -165,7 +165,7 @@ int runargv ANSI((CELLPTR, int, int, t_attr, char **));
 int Wait_for_child ANSI((int, int));
 void Clean_up_processes ANSI(());
 time_t CacheStat ANSI((char *, int));
-const int in_quit( void );
+int in_quit( void );
 
 
 #endif

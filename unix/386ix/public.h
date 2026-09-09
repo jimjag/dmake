@@ -163,6 +163,6 @@ int runargv ANSI((CELLPTR, int, int, t_attr, char **));
 int Wait_for_child ANSI((int, int));
 void Clean_up_processes ANSI(());
 time_t CacheStat ANSI((char *, int));
-const int in_quit( void );
+int in_quit( void );
 
 #endif

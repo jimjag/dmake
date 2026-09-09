@@ -116,7 +116,6 @@ EXTERN	int	Touch;		  /* -t */
 EXTERN	int	Check;		  /* -q */
 EXTERN	uint16	Verbose;	  /* -v */
 EXTERN	uint16	Measure;	  /* -m */
-/*EXTERN	int	Microsoft;	  /* -M */
 EXTERN	int	Transitive;	  /* -T */
 EXTERN  int     No_exec;          /* -X */
 

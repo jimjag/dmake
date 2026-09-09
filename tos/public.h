@@ -162,6 +162,6 @@ int If_root_path ANSI((char *));
 time_t seek_arch ANSI((char *, char *));
 int touch_arch ANSI(( char *, char *));
 void void_lcache ANSI(( char *, char *));
-const int in_quit( void );
+int in_quit( void );
 
 #endif

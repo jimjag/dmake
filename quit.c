@@ -82,7 +82,7 @@ int sig;
 }
 
 
-PUBLIC const int
+PUBLIC int
 in_quit( void )/*
 =================
    Called to check if we are already quitting.

@@ -169,6 +169,6 @@ void make_env ANSI(());
 void free_env ANSI(());
 void Remove_prq ANSI((CELLPTR));
 char *tempnam ANSI((char *,char *));
-const int in_quit( void );
+int in_quit( void );
 
 #endif

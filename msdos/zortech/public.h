@@ -165,6 +165,6 @@ void Remove_prq ANSI((CELLPTR));
 void Hook_std_writes ANSI((char *));
 void dstrlwr ANSI((char *, char *));
 time_t CacheStat ANSI((char *, int));
-const int in_quit( void );
+int in_quit( void );
 
 #endif

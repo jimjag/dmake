@@ -640,6 +640,7 @@ char  **cmd; /* Simulate a reference to *cmd. */
 #else  /* USE_SPAWN */
 
    fflush(stdout);
+   pid.tid = (DMHANDLE)0;	/* only USE_CREATEPROCESS has a thread id */
    switch( pid.pid = fork() ){
 
    case -1: /* fork failed */
@@ -727,7 +728,7 @@ int pqid;
      return -1;
    }
 
-   if( pqid > Max_proc ) Fatal("Internal Error: pqid > Max_proc !");
+   if( pqid >= Max_proc ) Fatal("Internal Error: pqid >= Max_proc !");
 
    if( pqid == -1 ) {
       /* Check if there is something to wait for. */
@@ -915,6 +916,11 @@ int     wfc;
      for( i=0; i<Max_proc; i++ )
        if( !_procs[i].pr_valid )
          break;
+
+     /* runargv() waits for a free slot before calling us, so this means
+      * _proc_cnt and the pr_valid flags have drifted apart. */
+     if( i == Max_proc )
+       Fatal( "Internal Error: No free process queue entry!" );
    }
 
    pp = &(_procs[i]);

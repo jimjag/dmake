@@ -81,7 +81,7 @@
 
 #define DMPVOID void *
 
-extern  const int in_quit( void ); /* for unix/runargv.c */
+extern  int in_quit( void ); /* for unix/runargv.c */
 
 #include <signal.h>
 #include "itypes.h"

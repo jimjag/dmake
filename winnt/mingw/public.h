@@ -161,6 +161,6 @@ int runargv ANSI((CELLPTR, int, int, t_attr, char **));
 void Clean_up_processes ANSI(());
 int Wait_for_child ANSI((int, int));
 void Remove_prq ANSI((CELLPTR));
-const int in_quit( void );
+int in_quit( void );
 
 #endif

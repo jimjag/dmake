@@ -32,7 +32,6 @@
 #define STRINGIFY(a)	DM_StGiFy(a)
 #define SET_INT_VAR_FROM_INT(name, val, flag, var) _set_int_var_from_int_and_str(name, val, STRINGIFY(val), flag, var)
 
-static	void	_set_int_var ANSI((char *, char *, int, int *));
 static	void	_set_int_var_from_int_and_str ANSI((char *, int, char *, int, int *));
 static	void	_set_bool_var ANSI((char *, int, int, char *));
 static	void	_set_string_var ANSI((char *, char *, int, char **));
@@ -65,7 +64,6 @@ Create_macro_vars()
    static char* switchar;
    static char* version;
    char   swchar[2];
-   char   buf[20];
 
    swchar[0] = Get_switch_char(), swchar[1] = '\0';
    _set_string_var("SWITCHAR", swchar, M_PRECIOUS, &switchar);
@@ -156,24 +154,6 @@ Create_macro_vars()
    SET_INT_VAR_FROM_INT("NAMEMAX", NAME_MAX, M_DEFAULT|M_NOEXPORT, &NameMax);
 }
 
-
-/*
-** Define an integer variable value, and set up the macro.
-*/
-static void
-_set_int_var(name, val, flag, var)
-char *name;
-char *val;
-int  flag;
-int  *var;
-{
-   HASHPTR hp;
-
-   hp = Def_macro(name, val, M_FLAG | flag);
-   hp->ht_flag |= M_VAR_INT | M_MULTI | M_INIT;
-   hp->MV_IVAR  = var;
-   *var         = atoi(val);
-}
 
 /*
 ** Define an integer variable value from an int, and set up the macro.
