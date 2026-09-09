@@ -1,0 +1,47 @@
+#!/bin/sh
+
+# Check process queue invariants, including spawn failure in a nonzero slot.
+
+: ${DMAKEPROG:=dmake}
+file1="mfile1.mk"
+tmpfiles="$file1"
+STARTDIR="`pwd`"; WORKDIR="$0-OUTPUT"
+CLEANUP="eval (cd $STARTDIR; rm -rf $WORKDIR)"
+$CLEANUP
+mkdir "$WORKDIR"; cd "$WORKDIR"
+
+trap "{ echo 'trapped signal - removing temporary files' ; $CLEANUP ; }" 1 2 3 15
+
+cat > "$file1" <<'EOT'
+SHELL*:=/bin/sh
+SHELLFLAGS*:=-ce
+
+all: slow missing final
+
+slow:
+	@+sleep 1
+
+missing:
+	-__dmake_command_that_does_not_exist__
+
+final:
+	@echo final
+EOT
+
+output=`../${DMAKEPROG} -r -P2 -f "$file1" all 2>&1`
+result=$?
+
+case "$output" in
+  *final*) ;;
+  *) echo "Final command did not run: $output"; result=1 ;;
+esac
+case "$output" in
+  *"Internal Error"*|*"Internal Warning"*)
+    echo "Process queue error: $output"
+    result=1
+    ;;
+esac
+
+test $result -eq 0 && echo "Success - Cleaning up" && $CLEANUP
+test $result -ne 0 && echo "Failure!"
+exit $result

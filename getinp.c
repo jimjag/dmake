@@ -122,17 +122,21 @@ do_again:
 
       Line_number++;
 
-      /* Set q to the last char in p before the \n\0. */
-      q = p+strlen(p)-2;
-      if( q >= p ) {	/* Only check for special cases if p points
-			 * to a non-empty line. */
+      /* Set q to the final content character, excluding a trailing newline. */
+      {
+	 size_t len = strlen(p);
+	 q = len ? p+len-1 : NIL(char);
+	 if( q != NIL(char) && *q == '\n' )
+	    q = (q == p) ? NIL(char) : q-1;
+      }
+      if( q != NIL(char) ) {
 
 	 /* ignore each RETURN at the end of a line before any further
 	  * processing */
 	 if( q[0] == '\r' && q[1] == '\n' ) {
 	    q[0] = '\n';
 	    q[1] = '\0';
-	    q--;
+	    q = (q == p) ? NIL(char) : q-1;
 	 }
 	 /* you also have to deal with END_OF_FILE chars to process raw
 	  * DOS-Files. Normally they are the last chars in file, but after
@@ -141,17 +145,15 @@ do_again:
 	  * actual line is END_OF_FILE, you can skip the last char. Then
 	  * you can search the line back until you find no more END_OF_FILE
 	  * and nuke each you found by string termination. */
-	 if( q >= p && q[0] == '\032' )
-	    q--;
-	 while( q+1 >= p && q[1] == '\032' ) {
-	    q[1] = '\0';
-	    q--;
+	 while( q != NIL(char) && q[0] == '\032' ) {
+	    q[0] = '\0';
+	    q = (q == p) ? NIL(char) : q-1;
 	 }
       }
 
       /* The stripping above can empty the line (a bare \r\n does), so only
        * decide here whether there is any content left to inspect. */
-      if( q >= p ) {
+      if( q != NIL(char) ) {
 
 	 /* ignore input if ignore flag set and line ends in a continuation
 	    character. */
@@ -851,4 +853,3 @@ int partcomp( char* lhs, int opcode )
 	#endif
 	return result;
 }
-

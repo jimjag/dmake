@@ -1,0 +1,33 @@
+#!/bin/sh
+
+# Check that dry-run touch does not modify the target and that short input
+# lines, including CRLF and DOS EOF markers, are parsed safely.
+
+: ${DMAKEPROG:=dmake}
+file1="mfile1.mk"
+target="touch-target"
+marker="touch-marker"
+tmpfiles="$file1 $target $marker"
+STARTDIR="`pwd`"; WORKDIR="$0-OUTPUT"
+CLEANUP="eval (cd $STARTDIR; rm -rf $WORKDIR)"
+$CLEANUP
+mkdir "$WORKDIR"; cd "$WORKDIR"
+
+trap "{ echo 'trapped signal - removing temporary files' ; $CLEANUP ; }" 1 2 3 15
+
+printf '\n\r\n\032\nall: %s\n%s:\n' "$target" "$target" > "$file1"
+touch "$target"
+sleep 1
+touch "$marker"
+
+../${DMAKEPROG} -r -n -t -f "$file1" all >/dev/null 2>&1
+result=$?
+
+if test "$target" -nt "$marker"; then
+  echo "Dry-run touch modified $target"
+  result=1
+fi
+
+test $result -eq 0 && echo "Success - Cleaning up" && $CLEANUP
+test $result -ne 0 && echo "Failure!"
+exit $result

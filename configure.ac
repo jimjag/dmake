@@ -6,7 +6,7 @@ dnl Set the package version
 dnl Don't forget to update the PACKAGE, VERSION and BUILDINFO macros in
 dnl win95/microsft/config.h to keep the native Microsoft C++
 dnl compiler build happy. 
-AC_INIT(dmake, 4.13.0)
+AC_INIT(dmake, 4.13.1)
 AC_CANONICAL_BUILD
 BUILDINFO="$build"
 
@@ -220,4 +220,3 @@ AC_CHECK_FUNCS(strlwr)
 
 dnl *** output to disk ***
 AC_OUTPUT
-

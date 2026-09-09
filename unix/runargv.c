@@ -290,7 +290,7 @@ dmwaitnext( wid, status )
    *status = 0;
 
    /* Create a list of possible objects to wait for. */
-   for( i=0; i<Max_proc; i++ ) {
+   for( i=0; i<_procs_size; i++ ) {
       if(_procs[i].pr_valid) {
 	 _wpList[numProc++] = _procs[i].pr_pid;
       }
@@ -308,9 +308,9 @@ dmwaitnext( wid, status )
 
    if( pEvent >= 0 && pEvent < WAIT_OBJECT_0 + numProc ) {
       *wid = _wpList[pEvent - WAIT_OBJECT_0];
-      for( i=0; i<Max_proc && _procs[i].pr_pid != *wid; i++ )
+      for( i=0; i<_procs_size && _procs[i].pr_pid != *wid; i++ )
 	 ;
-      if( i == Max_proc )
+      if( i == _procs_size )
 	 Fatal("Internal Error: Process not in pq !");
 
       GetExitCodeProcess(*wid, &dwExitCode);
@@ -511,6 +511,10 @@ char  **cmd; /* Simulate a reference to *cmd. */
       }
    }
 
+   if( _procs != NIL(PR) && _procs_size != Max_proc )
+      Fatal( "MAXPROCESS changed from `%d' to `%d' after a command was executed!",
+             _procs_size, Max_proc );
+
    /* If all process array entries are used wait until we get a free
     * slot. For Max_proc == 1 this forces sequential execution. */
    while( _proc_cnt == Max_proc ) {
@@ -627,7 +631,7 @@ char  **cmd; /* Simulate a reference to *cmd. */
       /* Use _add_child() / _finished_child() to treat the failure
        * gracefully, if so requested. */
       cur_proc = _add_child(DMNOPID, target, ignore, last, FALSE);
-      _finished_child((DMHANDLE)cur_proc, SIGTERM);
+      _finished_child((DMHANDLE)-cur_proc, SIGTERM);
 
       /* _finished_child() aborts dmake if we are not told to
        * ignore errors. If we reach the this point return 0 as
@@ -728,14 +732,15 @@ int pqid;
      return -1;
    }
 
-   if( pqid >= Max_proc ) Fatal("Internal Error: pqid >= Max_proc !");
+   if( pqid < -1 || pqid >= _procs_size )
+      Fatal("Internal Error: pqid outside process queue!");
 
    if( pqid == -1 ) {
       /* Check if there is something to wait for. */
       int i;
-      for( i=0; i<Max_proc && !_procs[i].pr_valid; i++ )
+      for( i=0; i<_procs_size && !_procs[i].pr_valid; i++ )
 	 ;
-      if( i == Max_proc )
+      if( i == _procs_size )
 	 return(-1);
 
       pid = (DMHANDLE)-1;
@@ -806,7 +811,7 @@ int pqid;
 	       /* otherwise disable all remaining pq's. As we don't know
 		* which pid failed there is no gracefull way to terminate. */
 	       int i;
-	       for( i=0; i<Max_proc; i++ ) {
+	       for( i=0; i<_procs_size; i++ ) {
 		  _procs[i].pr_valid = 0;
                   _procs[i].pr_recipe = NIL(RCP);
                }
@@ -852,7 +857,7 @@ Clean_up_processes()
    int i, ret;
 
    if( _procs != NIL(PR) ) {
-      for( i=0; i<Max_proc; i++ )
+      for( i=0; i<_procs_size; i++ )
 	 if( _procs[i].pr_valid ) {
 #if !defined(USE_CREATEPROCESS)
 	    if( (ret = kill(_procs[i].pr_pid, SIGTERM)) ) {
@@ -913,13 +918,13 @@ int     wfc;
    /* If _use_i ! =-1 then this function is called by _finished_child() ( through runargv() ),
       and we re-use the process queue number given by _use_i. */
    if( (i = _use_i) == -1 ) {
-     for( i=0; i<Max_proc; i++ )
+     for( i=0; i<_procs_size; i++ )
        if( !_procs[i].pr_valid )
          break;
 
      /* runargv() waits for a free slot before calling us, so this means
       * _proc_cnt and the pr_valid flags have drifted apart. */
-     if( i == Max_proc )
+     if( i == _procs_size )
        Fatal( "Internal Error: No free process queue entry!" );
    }
 
@@ -974,13 +979,13 @@ int	status;
     i = -((int)cid);
   }
   else {
-    for( i=0; i<Max_proc; i++ )
+    for( i=0; i<_procs_size; i++ )
       if( _procs[i].pr_valid && _procs[i].pr_pid == cid )
 	    break;
 
     /* Some children we didn't make esp true if using /bin/sh to execute a
      * a pipe and feed the output as a makefile into dmake. */
-    if( i == Max_proc ) {
+    if( i == _procs_size ) {
       Warning("Internal Warning: finished pid %d is not in pq!?", cid);
       return;
     }
@@ -1069,12 +1074,12 @@ CELLPTR cp;
 
    if( !_procs ) return( -1 );
 
-   for( i=0; i<Max_proc; i++ )
+   for( i=0; i<_procs_size; i++ )
       if( _procs[i].pr_valid &&
 	  _procs[i].pr_target == cp  )
 	 break;
 	 
-   return( i == Max_proc ? -1 : i );
+   return( i == _procs_size ? -1 : i );
 }
 
 
@@ -1091,7 +1096,7 @@ int     last;
    register int i;
    RCPPTR rp;
 
-   for( i=0; i<Max_proc; i++ )
+   for( i=0; i<_procs_size; i++ )
       if( _procs[i].pr_valid &&
 	  _procs[i].pr_target == cp  )
 	 break;

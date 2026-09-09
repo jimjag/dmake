@@ -316,10 +316,19 @@ char *path;
       DB_RETURN( path );
    }
 
-   /* Target names are not bound by PATH_MAX, so grow the buffer to fit.
-    * cygwin_conv_path() below is handed PATH_MAX and must never get less. */
+   /* Target names are not bound by PATH_MAX, so grow the buffer to fit. */
    len = (unsigned) strlen(path)+1;
    if( len < PATH_MAX ) len = PATH_MAX;
+
+#if __CYGWIN__
+   if( *path && path[1] == ':' && isalpha(*path) ) {
+      ssize_t needed = cygwin_conv_path(CCP_WIN_A_TO_POSIX, path, NULL, 0);
+      if( needed < 0 )
+	 Fatal( "error sizing conversion of \"%s\" - %s\n",
+		path, strerror(errno));
+      if( (size_t)needed > len ) len = (unsigned)needed;
+   }
+#endif
 
    if( len > cpathlen ) {
       cpathlen = (len+16) & ~0xf;	/* buf is always multiple of 16 */
@@ -335,7 +344,7 @@ char *path;
 #if __CYGWIN__
    /* Use cygwin function to convert a DOS path to a POSIX path. */
    if( *path && path[1] == ':' && isalpha(*path) ) {
-      int err = cygwin_conv_path(CCP_WIN_A_TO_POSIX, path, cpath, PATH_MAX);
+      int err = cygwin_conv_path(CCP_WIN_A_TO_POSIX, path, cpath, cpathlen);
       if (err < 0)
 	 Fatal( "error converting \"%s\" - %s\n",
 		path, strerror (errno));

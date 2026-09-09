@@ -432,7 +432,7 @@ TESTS = infra-0 function_macros-1 function_macros-2 function_macros-3 \
         recipes-7 recipes-8 recipes-9 \
         misc-1 misc-2 misc-3 misc-4 misc-5 misc-6 misc-7 misc-8 misc-9 \
         misc-10 misc-11 misc-12 misc-13 misc-14 misc-15 misc-16 misc-17 \
-        misc-18 misc-19 misc-20 misc-21 \
+        misc-18 misc-19 misc-20 misc-21 misc-22 misc-23 \
         targets-1 targets-2 targets-3 targets-4 targets-5 targets-6 \
         targets-7 targets-8 targets-9 targets-10 targets-11 targets-12 \
         targets-13 targets-14 targets-15 targets-16 targets-17 targets-18 \
@@ -982,6 +982,20 @@ misc-20.log: misc-20
 misc-21.log: misc-21
 	@p='misc-21'; \
 	b='misc-21'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+misc-22.log: misc-22
+	@p='misc-22'; \
+	b='misc-22'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+misc-23.log: misc-23
+	@p='misc-23'; \
+	b='misc-23'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
